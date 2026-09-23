@@ -1,4 +1,4 @@
-import Button from './Button';
+import Button from './Buttons';
 
 export default function ErrorState({ message = 'Something went wrong', onRetry }) {
   return (

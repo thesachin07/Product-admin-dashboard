@@ -1,4 +1,4 @@
-import ProductCard from './productCard';
+import ProductCard from './ProductCard';
 import ProductTable from './ProductTable';
 
 export default function ProductGrid({ products, onDelete }) {

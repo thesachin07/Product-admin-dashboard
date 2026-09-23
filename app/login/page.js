@@ -7,8 +7,7 @@ export const metadata = {
 };
 
 export default function LoginPage() {
-  // Note: We can't check auth here (server component + localStorage).
-  // Client-side redirect if already logged in will be handled by AuthGate later.
+
   return (
     <main className="min-h-screen flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">

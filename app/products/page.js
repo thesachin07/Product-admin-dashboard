@@ -2,12 +2,13 @@
 
 import { useProducts } from '@/features/products/hooks/useProducts';
 import ProductGrid from '@/features/products/components/ProductGrid';
+import Pagination from '@/features/products/components/Pagination';
 import Spinner from '@/shared/components/Spinner';
 import EmptyState from '@/shared/components/EmptyState';
 import ErrorState from '@/shared/components/ErrorState';
 
 export default function ProductsPage() {
-  const { products, total, loading, error, page, limit } = useProducts();
+  const { products, total, loading, error, page, limit, totalPages } = useProducts();
 
   if (loading) return <Spinner />;
 
@@ -37,6 +38,8 @@ export default function ProductsPage() {
       </div>
 
       <ProductGrid products={products} onDelete={() => {}} />
+
+      <Pagination page={page} totalPages={totalPages} limit={limit} />
     </div>
   );
 }

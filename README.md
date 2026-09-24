@@ -346,7 +346,6 @@ start.
 ## What's next if this had more time
 
 - Refresh token handling (DummyJSON returns one, currently unused).
-- Toast notifications for CRUD actions.
 - Optimistic UI (update before the request resolves) rather than after.
 - Move the overlay to IndexedDB for larger data sets.
 - Vitest for `urlHelpers`, `validators` and `productStore`.

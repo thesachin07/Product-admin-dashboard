@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Button from '@/shared/components/Button';
+import Button from '@/shared/components/Buttons';
 import Input from '@/shared/components/Input';
 import { validateProduct } from '@/shared/utils/validators';
 

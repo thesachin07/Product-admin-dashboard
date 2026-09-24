@@ -1,20 +1,23 @@
 import axiosClient from '@/lib/api/axiosClient';
 
-export async function getProducts({ limit = 10, skip = 0 } = {}) {
+export async function getProducts({ limit = 10, skip = 0, signal } = {}) {
   return axiosClient.get('/products', {
     params: { limit, skip },
+    signal,
   });
 }
 
-export async function searchProducts(q, { limit = 10, skip = 0 } = {}) {
+export async function searchProducts(q, { limit = 10, skip = 0, signal } = {}) {
   return axiosClient.get('/products/search', {
     params: { q, limit, skip },
+    signal,
   });
 }
 
-export async function getProductsByCategory(category, { limit = 10, skip = 0 } = {}) {
+export async function getProductsByCategory(category, { limit = 10, skip = 0, signal } = {}) {
   return axiosClient.get(`/products/category/${category}`, {
     params: { limit, skip },
+    signal,
   });
 }
 

@@ -7,13 +7,8 @@ import {
   searchProducts,
   getProductsByCategory,
 } from '../service/product.api';
-import {
-  parsePage,
-  parseLimit,
-  parseSortBy,
-  parseOrder,
-  parseString,
-} from '@/shared/utils/urlHelpers';
+import {parsePage, parseLimit, parseSortBy, parseOrder, parseString } from '@/shared/utils/urlHelpers';
+import { mergeWithLocal } from '../state/productStore';
 
 export function useProducts() {
   const searchParams = useSearchParams();
@@ -32,6 +27,11 @@ export function useProducts() {
     loading: true,
     error: null,
   });
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  function refresh() {
+    setRefreshKey((current) => current + 1);
+  }
 
   useEffect(() => {
     const controller = new AbortController();
@@ -42,17 +42,22 @@ export function useProducts() {
     let request;
 
     if (q) {
-      request = searchProducts(q, { limit, skip });
+      request = searchProducts(q, { limit, skip, signal: controller.signal });
     } else if (category) {
-      request = getProductsByCategory(category, { limit, skip });
+      request = getProductsByCategory(category, {
+        limit,
+        skip,
+        signal: controller.signal,
+      });
     } else {
-      request = getProducts({ limit, skip });
+      request = getProducts({ limit, skip, signal: controller.signal });
     }
 
     request
       .then((res) => {
+        if (controller.signal.aborted) return;
 
-        let products = res.products || [];
+        let products = mergeWithLocal(res.products || [] )
 
         if (sortBy) {
           products = [...products].sort((a, b) => {
@@ -75,7 +80,7 @@ export function useProducts() {
         });
       })
       .catch((err) => {
-        if (err.isCanceled) return;
+        if (controller.signal.aborted || err.isCanceled) return;
         setData({
           products: [],
           total: 0,
@@ -85,7 +90,7 @@ export function useProducts() {
       });
 
     return () => controller.abort();
-  }, [page, limit, q, category, sortBy, order]);
+  }, [page, limit, q, category, sortBy, order, refreshKey]);
 
   return {
     ...data,
@@ -95,6 +100,7 @@ export function useProducts() {
     category,
     sortBy,
     order,
+    refresh,
     totalPages: Math.ceil(data.total / limit) || 1,
   };
 }

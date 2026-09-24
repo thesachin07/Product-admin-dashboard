@@ -29,27 +29,33 @@ export function addLocalProduct(product) {
 
 export function updateLocalProduct(id, product) {
   const data = read();
-  data.updated[id] = { ...(data.updated[id] || {}), ...product };
+  const key = String(id);
+  data.updated[key] = { ...(data.updated[key] || {}), ...product };
   write(data);
 }
 
 export function deleteLocalProduct(id) {
   const data = read();
-  if (!data.deleted.includes(id)) data.deleted.push(id);
-  data.added = data.added.filter((p) => p.id !== id);
+  const key = String(id);
+  if (!data.deleted.includes(key)) data.deleted.push(key);
+  data.added = data.added.filter((p) => String(p.id) !== key);
   write(data);
 }
 
 export function mergeWithLocal(apiProducts) {
   const changes = read();
-
-  const deletedSet = new Set(changes.deleted);
+  const deletedSet = new Set(changes.deleted.map(String));
 
   const merged = apiProducts
-    .filter((p) => !deletedSet.has(p.id))
-    .map((p) => (changes.updated[p.id] ? { ...p, ...changes.updated[p.id] } : p));
+    .filter((p) => !deletedSet.has(String(p.id)))
+    .map((p) => {
+      const override = changes.updated[String(p.id)];
+      return override ? { ...p, ...override } : p;
+    });
 
-  const addedFiltered = changes.added.filter((p) => !deletedSet.has(p.id));
+  const addedFiltered = changes.added
+    .filter((p) => !deletedSet.has(String(p.id)))
+    .filter((p) => !merged.some((m) => String(m.id) === String(p.id)));
 
   return [...addedFiltered, ...merged];
 }

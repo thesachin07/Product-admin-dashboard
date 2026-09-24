@@ -12,7 +12,7 @@ CSS, Axios.
 
 ## Live
 
-- **Live URL:** product-admin-dashboard-bice.vercel.app
+- **Live URL:** https://product-admin-dashboard-bice.vercel.app/
 - **Repo:** https://github.com/thesachin07/Product-admin-dashboard/
 
 ---

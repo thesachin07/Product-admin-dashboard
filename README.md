@@ -12,8 +12,8 @@ CSS, Axios.
 
 ## Live
 
-- **Live URL:** _add after Vercel deploy_
-- **Repo:** _add after GitHub push_
+- **Live URL:** product-admin-dashboard-bice.vercel.app
+- **Repo:** https://github.com/thesachin07/Product-admin-dashboard/
 
 ---
 

@@ -15,6 +15,7 @@ export default function Navbar() {
     logout();
   }
 
+  // Close on outside click
   useEffect(() => {
     function handleClick(e) {
       if (ref.current && !ref.current.contains(e.target)) {
@@ -25,6 +26,12 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
+  const initials = user
+    ? (user.firstName?.[0] || '') + (user.lastName?.[0] || '') ||
+      user.username?.[0]?.toUpperCase() ||
+      'U'
+    : '';
+
   return (
     <nav className="bg-white border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
@@ -33,19 +40,45 @@ export default function Navbar() {
         </Link>
 
         {user && (
-          <div ref={ref} className="relative">
+          <div
+            ref={ref}
+            className="relative"
+            onMouseEnter={() => setOpen(true)}
+            onMouseLeave={() => setOpen(false)}
+          >
             <button
               onClick={() => setOpen((p) => !p)}
-              className="text-sm text-gray-700 hover:text-gray-900"
+              aria-expanded={open}
+              className="flex items-center gap-2 px-2 py-1.5 rounded-md border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 transition"
             >
-              {user.firstName || user.username}
+              <span className="w-7 h-7 rounded-full bg-blue-600 text-white text-xs font-semibold flex items-center justify-center uppercase">
+                {initials}
+              </span>
+
+              <span className="hidden sm:block text-sm font-medium text-gray-700">
+                {user.firstName || user.username}
+              </span>
+
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-gray-400"
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
             </button>
 
             {open && (
-              <div className="absolute right-0 top-full mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-md py-2">
+              <div className="absolute right-0 top-full mt-2 w-44 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50">
                 <button
                   onClick={handleLogout}
-                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
                 >
                   Logout
                 </button>

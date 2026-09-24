@@ -13,6 +13,7 @@ import ErrorState from '@/shared/components/ErrorState';
 import Modal from '@/shared/components/Modal';
 import { deleteProduct as apiDeleteProduct } from '@/features/products/service/product.api';
 import { deleteLocalProduct } from '@/features/products/state/productStore';
+import { toast } from 'sonner';
 
 export default function ProductsPage() {
   const { products, total, loading, error, page, limit, totalPages, refresh } = useProducts();
@@ -31,8 +32,9 @@ export default function ProductsPage() {
       deleteLocalProduct(pendingDelete.id);
       setPendingDelete(null);
       refresh();
+      toast.success('Product deleted');
     } catch (err) {
-      alert(err.message || 'Failed to delete');
+      toast.error(err.message || 'Failed to delete');
     } finally {
       setDeleting(false);
     }

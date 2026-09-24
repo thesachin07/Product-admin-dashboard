@@ -3,11 +3,17 @@
 import Link from 'next/link';
 import { useRef, useState, useEffect } from 'react';
 import { useAuthContext } from '@/features/auth/state/AuthContext';
+import { toast } from 'sonner';
 
 export default function Navbar() {
   const { user, logout } = useAuthContext();
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
+
+  function handleLogout() {
+    toast.success('Logged out');
+    logout();
+  }
 
   useEffect(() => {
     function handleClick(e) {
@@ -38,7 +44,7 @@ export default function Navbar() {
             {open && (
               <div className="absolute right-0 top-full mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-md py-2">
                 <button
-                  onClick={logout}
+                  onClick={handleLogout}
                   className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
                   Logout

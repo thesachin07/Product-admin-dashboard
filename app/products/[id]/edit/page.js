@@ -10,6 +10,7 @@ import { updateProduct } from '@/features/products/service/product.api';
 import { updateLocalProduct } from '@/features/products/state/productStore';
 import Spinner from '@/shared/components/Spinner';
 import ErrorState from '@/shared/components/ErrorState';
+import { toast } from 'sonner';
 
 export default function EditProductPage({ params }) {
   const { id } = use(params);
@@ -18,10 +19,16 @@ export default function EditProductPage({ params }) {
   const { product, loading, error, notFound } = useProductDetail(id);
 
   async function handleSubmit(values) {
-  const updated = await updateProduct(id, values);
-  updateLocalProduct(id, { ...updated, ...values, id: Number(id) });
-  router.replace('/products');
-}
+    try {
+      const updated = await updateProduct(id, values);
+      updateLocalProduct(id, { ...updated, ...values, id: Number(id) });
+      toast.success('Product updated');
+      router.replace('/products');
+    } catch (err) {
+      toast.error(err.message || 'Failed to update product');
+      throw err;
+    }
+  }
 
   if (loading) return <Spinner />;
 

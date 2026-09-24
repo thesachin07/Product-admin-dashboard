@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Button from '@/shared/components/Buttons';
 import Input from '@/shared/components/Input';
 import { useAuthContext } from '../state/AuthContext';
+import { toast } from 'sonner';
 
 const INITIAL_FORM = { username: '', password: '' };
 
@@ -41,9 +42,11 @@ export default function LoginForm() {
 
     try {
       await login({ username: form.username, password: form.password });
+      toast.success(`Welcome back, ${form.username}`);
       router.replace('/products');
     } catch (err) {
       if (err.isCanceled) return;
+      toast.error(err.message || 'Login failed');
       setApiError(err.message || 'Login failed. Please try again.');
     }
   }

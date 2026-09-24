@@ -5,19 +5,25 @@ import ProductForm from '@/features/products/components/ProductForm';
 import { useCategories } from '@/features/products/hooks/useCategories';
 import { addProduct } from '@/features/products/service/product.api';
 import { addLocalProduct } from '@/features/products/state/productStore';
+import { toast } from 'sonner';
 
 export default function AddProductPage() {
   const router = useRouter();
   const categories = useCategories();
 
   async function handleSubmit(values) {
-    
-    const created = await addProduct(values);
+    try {
+      const created = await addProduct(values);
 
-    // Persist locally because api doesn't actually save
-    addLocalProduct(created);
+      // Persist locally because api doesn't actually save
+      addLocalProduct(created);
 
-    router.replace('/products');
+      toast.success('Product added');
+      router.replace('/products');
+    } catch (err) {
+      toast.error(err.message || 'Failed to add product');
+      throw err;
+    }
   }
 
   return (

@@ -4,6 +4,7 @@ import { useProducts } from '@/features/products/hooks/useProducts';
 import ProductGrid from '@/features/products/components/ProductGrid';
 import Pagination from '@/features/products/components/Pagination';
 import SearchBar from '@/features/products/components/SearchBar';
+import FilterSort from '@/features/products/components/FilterSort';
 import Spinner from '@/shared/components/Spinner';
 import EmptyState from '@/shared/components/EmptyState';
 import ErrorState from '@/shared/components/ErrorState';
@@ -27,9 +28,13 @@ export default function ProductsPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold text-gray-900">Products</h1>
+      </div>
+
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
         <SearchBar />
+        <FilterSort />
       </div>
 
       {!products.length ? (
